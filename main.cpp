@@ -3,6 +3,8 @@
 #include "BigraphToDigraph.h"
 using namespace std;
 
+const int MAXN = 10000000;
+
 vector<int> in[MAXN];
 vector<int> out[MAXN];
 
@@ -105,16 +107,33 @@ int func(AlignmentGraph& graph, FastQ& query) {
 }
 
 int main(void) {
-    auto fastqs = loadFastqFromFile("./input/ref10000_simulatedreads.fastq");
+        auto fastqs = loadFastqFromFile("./input/ref10000_simulatedreads.fastq");
     auto alignmentGraph = DirectedGraph::StreamGFAGraphFromFile("./input/ref10000_linear.gfa");
     
     auto timeStart = std::chrono::steady_clock::now();
-    
     int count = 0;
     vector<int> results;
+    
     for (auto f : fastqs) {
         int solution;
         if (count % 2 == 0) {
 	        solution = func(alignmentGraph, f);
         } else {
-            au
+            auto frev = f.reverseComplement();
+    	    solution = func(alignmentGraph, frev);
+        }
+        results.push_back(solution);
+        cout << solution << endl;
+        count++;
+    }
+	
+    auto timeEnd = std::chrono::steady_clock::now();
+    size_t ms = std::chrono::duration_cast<std::chrono::microseconds>(timeEnd - timeStart).count();
+	std::cout << ms << " ms" << endl;
+    
+    for(int i = 0; i < results.size(); i++) {
+        cout << results[i] << endl;
+    }
+    
+    return 0;
+} 
