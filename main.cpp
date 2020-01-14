@@ -8,6 +8,9 @@ const int MAXN = 10000000;
 vector<int> in[MAXN];
 vector<int> out[MAXN];
 
+/*
+recursive check and update of node values in cyclic graphs if insertion is needed
+*/
 void propagate(int u, int v, AlignmentGraph& graph, vector<int> &Cold, vector<int> &Cnew) {
     if(Cnew[v] > 1 + Cnew[u]) {
         Cnew[v] = 1 + Cnew[u];
@@ -16,6 +19,9 @@ void propagate(int u, int v, AlignmentGraph& graph, vector<int> &Cold, vector<in
         }
     }
 }
+/*
+Navarro algorithm implementation - https://www.sciencedirect.com/science/article/pii/S0304397599003333
+*/
 
 int func(AlignmentGraph& graph, FastQ& query) {
     for(int i = 0; i < MAXN; i++) in[i].clear(), out[i].clear();
@@ -41,29 +47,23 @@ int func(AlignmentGraph& graph, FastQ& query) {
     
     for(auto comp: components) {
         for(int i = 0; i < comp.size(); i++) {
-            //oni koji ulaze
+            
             for(int j = 0; j < graph.inNeighbors[comp[i]].size(); j++) {
                 int curr = graph.inNeighbors[comp[i]][j];
                 int fake_id = mapping[curr];
                 out[fake_id + graph.nodeToSeq[curr].size() - 1].push_back(mapping[comp[i]]);
             }
-            //oni koji izlaze
+            
             for(int j = 0; j < graph.outNeighbors[comp[i]].size(); j++) {
                 int curr = graph.outNeighbors[comp[i]][j];
-                in[mapping[curr]].push_back(mapping[comp[i]] + graph.nodeToSeq[comp[i]].size() - 1);//zadnji u liniji
+                in[mapping[curr]].push_back(mapping[comp[i]] + graph.nodeToSeq[comp[i]].size() - 1);
             }
         }
     }
     
     vector<int> v;
-    // cout << v.size() << endl;
-    // cout << componentOrder.first.size() << endl;
     vector<int> Cnew(topo_sort.size(), 0);
     vector<int> Cold(topo_sort.size(), 0);
-
-    // cout << "duljina patterna == " << query.sequence.size() << endl;
-    // cout << "duljina graphnodea == " << graph.NodeSize() << endl; 
-    // cout << "ove dvije duljine moraju bit jednake " << topo_sort.size() << " " << all_chars.size() << endl;
     
     for(int i = 0; i < query.sequence.size(); i++) {
         for(int j = 0; j < topo_sort.size(); j++) {
@@ -104,8 +104,11 @@ int func(AlignmentGraph& graph, FastQ& query) {
         sol = min(sol, Cnew[i]);
     }
     return sol;
-    //cout << "krajnje rjesenje == " << sol << endl;
 }
+
+/*
+main function
+*/
 
 int main(void) {
     auto fastqs = loadFastqFromFile("./input/ref10000_simulatedreads.fastq");
