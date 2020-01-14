@@ -1,4 +1,8 @@
 # bioinformatics-navarro
+
+* Project done for [Bioinformatics course] (https://www.fer.unizg.hr/predmet/bio) 
+* [University of Zagreb - Faculty of Electrical Engineering and Computing](https://www.fer.unizg.hr/)
+
 ## About
 
 Implementation of Navarro's algorithm (Improved approximate pattern matching on hypertext) described here
