@@ -18,6 +18,7 @@ void propagate(int u, int v, AlignmentGraph& graph, vector<int> &Cold, vector<in
 }
 
 int func(AlignmentGraph& graph, FastQ& query) {
+    for(int i = 0; i < MAXN; i++) in[i].clear(), out[i].clear();
     auto componentOrder = graph.TopologicalOrderOfComponents();
     vector<vector<size_t>> components = componentOrder.first;
     vector<size_t> topo_sort;
@@ -107,8 +108,8 @@ int func(AlignmentGraph& graph, FastQ& query) {
 }
 
 int main(void) {
-        auto fastqs = loadFastqFromFile("./input/ref10000_simulatedreads.fastq");
-    auto alignmentGraph = DirectedGraph::StreamGFAGraphFromFile("./input/ref10000_linear.gfa");
+    auto fastqs = loadFastqFromFile("./input/ref10000_simulatedreads.fastq");
+    auto alignmentGraph = DirectedGraph::StreamGFAGraphFromFile("./input/ref10000_twopath.gfa");
     
     auto timeStart = std::chrono::steady_clock::now();
     int count = 0;
@@ -116,12 +117,16 @@ int main(void) {
     
     for (auto f : fastqs) {
         int solution;
+        auto tstart = std::chrono::steady_clock::now();
         if (count % 2 == 0) {
 	        solution = func(alignmentGraph, f);
         } else {
             auto frev = f.reverseComplement();
     	    solution = func(alignmentGraph, frev);
         }
+        auto ttend = std::chrono::steady_clock::now();
+        size_t ms = std::chrono::duration_cast<std::chrono::microseconds>(ttend - tstart).count();
+        cout << "vrijeme: " << (double) ms / 1000000 << endl;
         results.push_back(solution);
         cout << solution << endl;
         count++;
