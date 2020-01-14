@@ -11,21 +11,21 @@ Comparing results with paper:
 Implemented here:
 ```https://github.com/maickrau/GraphAligner/tree/PaperExperiments```
 
-##Prerequisites
+## Installing
 ---
 Install boost, for Linux
 
 ---
 ```sudo apt install libboost-all-dev```
 
-##Usage
+## Usage
 ---
 For starting use compile-execute.sh scrypt which compiles and then executes program
 
 ---
 ```./compile-execute.sh```
 
-##Note
+## Note
 ---
 Used from github (https://github.com/maickrau/GraphAligner/tree/PaperExperiments):
 
