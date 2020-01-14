@@ -107,5 +107,14 @@ int func(AlignmentGraph& graph, FastQ& query) {
 int main(void) {
     auto fastqs = loadFastqFromFile("./input/ref10000_simulatedreads.fastq");
     auto alignmentGraph = DirectedGraph::StreamGFAGraphFromFile("./input/ref10000_linear.gfa");
-    return 0;
-}
+    
+    auto timeStart = std::chrono::steady_clock::now();
+    
+    int count = 0;
+    vector<int> results;
+    for (auto f : fastqs) {
+        int solution;
+        if (count % 2 == 0) {
+	        solution = func(alignmentGraph, f);
+        } else {
+            au
